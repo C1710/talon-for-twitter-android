@@ -387,17 +387,13 @@ public class AppSettings {
         widgetDisplayScreenname = sharedPrefs.getBoolean("widget_display_screenname", true);
         onlyAutoPlayGifs = sharedPrefs.getBoolean("autoplay_gifs", false);
 
-        if (EmojiInitializer.INSTANCE.isAlreadyUsingGoogleAndroidO()) {
-            this.emojiStyle = EmojiStyle.DEFAULT;
-        } else {
-            String emojiStyle = sharedPrefs.getString("emoji_style", "android_o");
-            switch (emojiStyle) {
-                case "android_o":
-                    this.emojiStyle = EmojiStyle.ANDROID_O;
-                    break;
-                default:
-                    this.emojiStyle = EmojiStyle.DEFAULT;
-            }
+        String emojiStyle = sharedPrefs.getString("emoji_style", "android_o");
+        switch (emojiStyle) {
+            case "android_o":
+                this.emojiStyle = EmojiStyle.ANDROID_O;
+                break;
+            default:
+                this.emojiStyle = EmojiStyle.DEFAULT;
         }
 
         String notificationsOption = sharedPrefs.getString("notification_options", "legacy");

@@ -160,6 +160,7 @@ dependencies {
     implementation "com.android.support:customtabs:$ANDROID_SUPPORT_VERSION"
     implementation "com.android.support:preference-v7:$ANDROID_SUPPORT_VERSION"
     implementation "com.android.support:preference-v14:$ANDROID_SUPPORT_VERSION"
+    implementation 'de.c1710:filemojicompat:1.0.7'
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'com.klinkerapps:link_builder:2.0.3'
