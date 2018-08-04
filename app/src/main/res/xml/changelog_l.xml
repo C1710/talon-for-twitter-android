@@ -1,5 +1,24 @@
 <changelog>
 
+    <version name="7.4.1">
+        <text>Twitter is shutting down their streaming services. I have removed Talon Pull from the app, as it will no longer work.</text>
+        <text>Other updates to work with the latest Twitter APIs.</text>
+    </version>
+
+    <version name="7.4.0">
+        <text>Crop images with a custom aspect ratio, instead of the pre-defined ratios</text>
+        <text>Save images on Android P beta</text>
+    </version>
+
+    <version name="7.3.1">
+        <text>Improvements around scheduled tweets</text>
+    </version>
+
+    <version name="7.3.0">
+        <text>The app is now open source! It will continue to be distributed from Google Play, but any developers can take a look if they want! https://github.com/klinker24/talon-for-twitter-android</text>
+        <text>Bug fixes</text>
+    </version>
+
     <version name="7.2.6">
         <text>Bug fixes for Android P</text>
     </version>

@@ -54,7 +54,7 @@ android {
 
             buildConfigField "String", "CONSUMER_KEY_OLD_1", secrets['CONSUMER_KEY_OLD_1'] != null ? secrets['CONSUMER_KEY_OLD_1'] : "\"This is optional.\""
             buildConfigField "String", "CONSUMER_SECRET_OLD_1", secrets['CONSUMER_SECRET_OLD_1'] != null ? secrets['CONSUMER_SECRET_OLD_1'] : "\"This is optional.\""
-            buildConfigField "String", "CONSUMER_KEY_OLD_2", secrets['CONSUMER_KEY_OLD_12'] != null ? secrets['CONSUMER_KEY_OLD_2'] : "\"This is optional.\""
+            buildConfigField "String", "CONSUMER_KEY_OLD_2", secrets['CONSUMER_KEY_OLD_2'] != null ? secrets['CONSUMER_KEY_OLD_2'] : "\"This is optional.\""
             buildConfigField "String", "CONSUMER_SECRET_OLD_2", secrets['CONSUMER_SECRET_OLD_2'] != null ? secrets['CONSUMER_SECRET_OLD_2'] : "\"This is optional.\""
             buildConfigField "String", "CONSUMER_KEY_OLD_3", secrets['CONSUMER_KEY_OLD_3'] != null ? secrets['CONSUMER_KEY_OLD_3'] : "\"This is optional.\""
             buildConfigField "String", "CONSUMER_SECRET_OLD_3", secrets['CONSUMER_SECRET_OLD_3'] != null ? secrets['CONSUMER_SECRET_OLD_3'] : "\"This is optional.\""
@@ -187,7 +187,7 @@ dependencies {
     implementation 'com.melnykov:floatingactionbutton:1.3.0'
     implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
     implementation 'com.flipboard:bottomsheet-core:1.5.0'
-    implementation 'com.yalantis:ucrop:1.5.0'
+    implementation 'com.github.yalantis:ucrop:2.2.2'
     implementation 'me.leolin:ShortcutBadger:1.1.14@aar'
     implementation 'com.github.ajalt.reprint:core:2.9.2@aar'
     implementation 'com.github.ajalt.reprint:reprint_spass:2.9.2@aar'

@@ -341,21 +341,13 @@ public class DirectMessageConversation extends WhiteToolbarActivity {
                         data.setMediaId(media.getMediaId());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, getString(R.string.error_attaching_image), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        runOnUiThread(() -> Toast.makeText(context, getString(R.string.error_attaching_image), Toast.LENGTH_SHORT).show());
                     }
 
                 }
 
                 DirectMessageEvent message = twitter.createMessage(data);
-
-                if (!settings.pushNotifications) {
-                    DMDataSource.getInstance(context).createSentDirectMessage(message, user, settings, settings.currentAccount);
-                }
+                DMDataSource.getInstance(context).createSentDirectMessage(message, user, settings, settings.currentAccount);
 
                 sharedPrefs.edit().putLong("last_direct_message_id_" + sharedPrefs.getInt("current_account", 1), message.getId()).apply();
                 sharedPrefs.edit().putBoolean("refresh_me_dm", true).apply();
@@ -526,6 +518,7 @@ public class DirectMessageConversation extends WhiteToolbarActivity {
             options.setActiveWidgetColor(settings.themeColors.accentColor);
             options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
             options.setCompressionQuality(100);
+            options.setFreeStyleCropEnabled(true);
 
             File destination = File.createTempFile("ucrop", "jpg", getCacheDir());
             UCrop.of(sourceUri, Uri.fromFile(destination))

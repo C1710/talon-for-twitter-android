@@ -164,8 +164,6 @@ public class AppSettings {
     public boolean favoriteUserNotifications;
     public boolean syncSecondMentions;
     public boolean displayScreenName;
-    public boolean liveStreaming;
-    public boolean pushNotifications;
     public boolean inAppBrowser;
     public boolean showBoth;
     public boolean absoluteDate;
@@ -460,18 +458,6 @@ public class AppSettings {
             useEmoji = false;
         }
 
-        String pull = sharedPrefs.getString("talon_pull", "0");
-        if (pull.equals("0")) {
-            liveStreaming = false;
-            pushNotifications = false;
-        } else if (pull.equals("1")) {
-            pushNotifications = true;
-            liveStreaming = false;
-        } else {
-            pushNotifications = true;
-            liveStreaming = true;
-        }
-
         // Integers
         currentAccount = sharedPrefs.getInt("current_account", 1);
         theme = sharedPrefs.getInt("material_theme_" + currentAccount, DEFAULT_THEME);
@@ -508,7 +494,7 @@ public class AppSettings {
         activityRefresh = Long.parseLong(sharedPrefs.getString("activity_sync_interval", "0"));
         listRefresh = Long.parseLong(sharedPrefs.getString("list_sync_interval", "0"));
 
-        translateUrl = sharedPrefs.getString("translate_url", "http://translate.google.com/#auto|en|");
+        translateUrl = sharedPrefs.getString("translate_url", "https://translate.google.com/#auto|en|");
 
         if (baseTheme != 2 && sharedPrefs.getBoolean("night_mode", false)) {
             int startHour = sharedPrefs.getInt("night_start_hour", 22);
@@ -568,8 +554,6 @@ public class AppSettings {
             refreshOnStart = false;
             syncMobile = false;
             syncSecondMentions = false;
-            liveStreaming = false;
-            pushNotifications = false;
             higherQualityImages = false;
             webPreviews = false;
 

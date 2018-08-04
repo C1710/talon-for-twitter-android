@@ -918,6 +918,7 @@ public abstract class Compose extends Activity implements
             options.setActiveWidgetColor(settings.themeColors.accentColor);
             options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
             options.setCompressionQuality(100);
+            options.setFreeStyleCropEnabled(true);
 
             File destination = File.createTempFile("ucrop", "jpg", getCacheDir());
             UCrop.of(sourceUri, Uri.fromFile(destination))
@@ -1154,7 +1155,7 @@ public abstract class Compose extends Activity implements
                 User user = twitter.showUser(sendTo);
                 MessageData data = new MessageData(user.getId(), status);
 
-                if (!attachedUri.equals("")) {
+                if (!attachedUri[0].equals("")) {
                     try {
                         File f;
 
@@ -1169,12 +1170,7 @@ public abstract class Compose extends Activity implements
                         data.setMediaId(media.getMediaId());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, getString(R.string.error_attaching_image), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        runOnUiThread(() -> Toast.makeText(context, getString(R.string.error_attaching_image), Toast.LENGTH_SHORT).show());
                     }
 
                 }
