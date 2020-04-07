@@ -29,10 +29,10 @@ public class Regex {
                     "builders|buzz|bzh|cab|camera|camp|cancerresearch|capetown|capital|cards|care|career|careers|cash|cat|catering|" +
                     "center|ceo|cheap|christmas|church|citic|city|claims|cleaning|click|clinic|clothing|club|codes|coffee|college|cologne|com|" +
                     "community|company|computer|condos|construction|consulting|contractors|cooking|cool|coop|country|credit|" +
-                    "creditcard|cruises|cuisinella|dance|dating|degree|democrat|dental|dentist|desi|design|diamonds|digital|direct|" +
+                    "creditcard|cruises|cuisinella|dance|dating|deals|degree|democrat|dental|dentist|desi|design|dev|diamonds|digital|direct|" +
                     "directory|discount|dnp|domains|durban|edu|education|email|engineer|engineering|enterprises|equipment|estate|" +
                     "eus|events|exchange|expert|exposed|fail|farm|feedback|finance|financial|fish|fishing|fitness|flights|florist|" +
-                    "foo|foundation|frogans|fund|furniture|futbol|gal|gallery|games|gift|gives|glass|global|globo|gmo|gop|google|gov|graphics|" +
+                    "foo|foundation|frogans|fund|furniture|futbol|gal|gallery|games|gift|gives|glass|gle|global|globo|gmo|gop|google|gov|graphics|" +
                     "gratis|green|gripe|guide|guitars|guru|hamburg|haus|hiphop|hiv|hockey|holdings|holiday|homes|horse|host|house|" +
                     "immobilien|industries|info|ink|institute|insure|int|international|investments|ist|jetzt|jobs|joburg|juegos|kaufen|" +
                     "kim|kitchen|kiwi|koeln|kred|land|lawyer|lease|legal|lgbt|life|lighting|limited|limo|link|live|loans|london|lotto|luxe|" +
@@ -44,7 +44,7 @@ public class Regex {
                     "software|sohu|solar|solutions|soy|space|spiegel|supplies|supply|support|surf|surgery|suzuki|systems|tattoo|" +
                     "tax|tech|technology|tel|tienda|tips|tirol|today|tokyo|tools|town|toys|trade|training|travel|trust|university|uno|" +
                     "vacations|vegas|ventures|versicherung|vet|viajes|villas|vision|vlaanderen|vodka|vote|voting|voto|voyage|wang|" +
-                    "watch|webcam|website|wed|wien|wiki|works|wtc|wtf|xxx|xyz|yachts|yokohama|zone|дети|москва|онлайн|орг|сайт|" +
+                    "watch|webcam|website|wed|wien|wiki|work|wtc|wtf|xxx|xyz|yachts|yokohama|zone|дети|москва|онлайн|орг|сайт|" +
                     "بازار|شبكة|موقع|संगठन|みんな|世界|中信|中文网|公司|公益|商城|商标|在线|我爱你|政务|机构|游戏|移动|组织机构|网址|网络|集团|삼성" +
                     "ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bl|bm|bn|bo|bq|br|bs|bt|bv|" +
                     "bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cu|cv|cw|cx|cy|cz|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|" +

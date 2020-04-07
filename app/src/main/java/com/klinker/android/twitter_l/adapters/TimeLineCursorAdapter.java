@@ -12,7 +12,9 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.RippleDrawable;
@@ -20,7 +22,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.support.v4.app.ActivityManagerCompat;
+import androidx.core.app.ActivityManagerCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.Display;
@@ -33,7 +35,7 @@ import android.widget.*;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.halilibo.bettervideoplayer.BetterVideoPlayer;
+import com.halilibo.bvpkotlin.BetterVideoPlayer;
 import com.klinker.android.link_builder.Link;
 import com.klinker.android.link_builder.LinkBuilder;
 import com.klinker.android.peekview.PeekViewActivity;
@@ -46,6 +48,7 @@ import com.klinker.android.twitter_l.R;
 import com.klinker.android.twitter_l.activities.media_viewer.image.ImageViewerActivity;
 import com.klinker.android.twitter_l.activities.media_viewer.image.TimeoutThread;
 import com.klinker.android.twitter_l.data.WebPreview;
+import com.klinker.android.twitter_l.listeners.MultipleImageTouchListener;
 import com.klinker.android.twitter_l.views.QuotedTweetView;
 import com.klinker.android.twitter_l.views.TweetView;
 import com.klinker.android.twitter_l.data.sq_lite.HomeSQLiteHelper;
@@ -82,6 +85,8 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
 
     public Map<Long, Status> quotedTweets = new HashMap();
     public Map<String, WebPreview> webPreviews = new HashMap();
+    public Set<Long> likedStatuses = new HashSet<>();
+    public Set<Long> retweetedStatuses = new HashSet<>();
 
     @Override
     public void onLinkLoaded(@NotNull String link, @NotNull WebPreview preview) {
@@ -153,6 +158,9 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
         public SimpleVideoView videoView;
         public LinearLayout conversationArea;
         public WebPreviewCard webPreviewCard;
+        public LinearLayout alwaysShownButtons;
+        public ImageButton likeButton;
+        public ImageButton retweetButton;
 
         // revamped tweet
         public View revampedTopLine;
@@ -169,6 +177,7 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
         public String gifUrl = "";
 
         public boolean preventNextClick = false;
+        public MultipleImageTouchListener imageTouchListener;
     }
 
     // This is need for the case that the activity is paused while the handler is counting down
@@ -379,6 +388,7 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
         holder.videoView = (SimpleVideoView) v.findViewById(R.id.video_view);
         holder.conversationArea = (LinearLayout) v.findViewById(R.id.conversation_area);
         holder.webPreviewCard = (WebPreviewCard) v.findViewById(R.id.web_preview_card);
+        holder.alwaysShownButtons = (LinearLayout) v.findViewById(R.id.always_shown_buttons);
 
         // revamped tweet
         holder.revampedTopLine = v.findViewById(R.id.line_above_profile_picture);
@@ -397,6 +407,14 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             holder.image.setClipToOutline(true);
+        }
+
+        if (!(this instanceof ActivityCursorAdapter) && settings.alwaysShowButtons && holder.alwaysShownButtons.getChildCount() == 0) {
+            holder.alwaysShownButtons.addView(LayoutInflater.from(holder.background.getContext()).inflate(R.layout.always_shown_tweet_buttons, null, false));
+            holder.alwaysShownButtons.setVisibility(View.VISIBLE);
+
+            holder.likeButton = holder.alwaysShownButtons.findViewById(R.id.always_like_button);
+            holder.retweetButton = holder.alwaysShownButtons.findViewById(R.id.always_retweet_button);
         }
 
         // some things we just don't need to configure every time
@@ -500,6 +518,9 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
 
         v.setTag(holder);
 
+        holder.imageTouchListener = new MultipleImageTouchListener();
+        holder.image.setOnTouchListener(holder.imageTouchListener);
+
         return v;
     }
 
@@ -593,6 +614,7 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
         final String screenname = cursor.getString(SCREEN_NAME_COL);
         final String picUrl = cursor.getString(PIC_COL);
         holder.picUrl = picUrl;
+        holder.imageTouchListener.setImageUrls(picUrl);
         final long longTime = cursor.getLong(TIME_COL);
         final String otherUrl = cursor.getString(URL_COL);
         final String users = cursor.getString(USER_COL);
@@ -688,6 +710,75 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
                 holder.background.setVisibility(View.VISIBLE);
                 holder.muffledName.setVisibility(View.GONE);
             }
+        }
+
+        if (settings.alwaysShowButtons && !(this instanceof ActivityCursorAdapter)) {
+            if (likedStatuses.contains(holder.tweetId)) {
+                holder.likeButton.setImageResource(R.drawable.ic_heart_dark);
+                holder.likeButton.setColorFilter(settings.themeColors.accentColor, PorterDuff.Mode.MULTIPLY);
+            } else {
+                if(!settings.darkTheme) {
+                    holder.likeButton.setImageResource(R.drawable.ic_heart_light);
+                    holder.likeButton.setColorFilter(Color.BLACK);
+                } else {
+                    holder.likeButton.clearColorFilter();
+                }
+            }
+
+            if (retweetedStatuses.contains(holder.tweetId)) {
+                holder.retweetButton.setImageResource(R.drawable.ic_action_repeat_dark);
+                holder.retweetButton.setColorFilter(settings.themeColors.accentColor, PorterDuff.Mode.MULTIPLY);
+            } else {
+                if(!settings.darkTheme) {
+                    holder.retweetButton.setImageResource(R.drawable.ic_action_repeat_light);
+                    holder.retweetButton.setColorFilter(Color.BLACK);
+                } else {
+                    holder.retweetButton.clearColorFilter();
+                }
+            }
+
+            TweetButtonUtils utils = new TweetButtonUtils(holder.background.getContext());
+            utils.setUpSimpleButtons(holder.tweetId, screenname, tweetText, holder.alwaysShownButtons, (newLikeState, originalStatus) -> {
+                if (newLikeState) {
+                    likedStatuses.add(originalStatus.getId());
+                } else {
+                    likedStatuses.remove(originalStatus.getId());
+                }
+
+                if (holder.tweetId == originalStatus.getId()) {
+                    if (newLikeState) {
+                        holder.likeButton.setImageResource(R.drawable.ic_heart_dark);
+                        holder.likeButton.setColorFilter(settings.themeColors.accentColor, PorterDuff.Mode.MULTIPLY);
+                    } else {
+                        if (!settings.darkTheme) {
+                            holder.likeButton.setImageResource(R.drawable.ic_heart_light);
+                            holder.likeButton.setColorFilter(Color.BLACK);
+                        } else {
+                            holder.likeButton.clearColorFilter();
+                        }
+                    }
+                }
+            }, (newRetweetState, originalStatus) -> {
+                if (newRetweetState) {
+                    retweetedStatuses.add(originalStatus.getId());
+                } else {
+                    retweetedStatuses.remove(originalStatus.getId());
+                }
+
+                if (holder.tweetId == originalStatus.getId()) {
+                    if (newRetweetState) {
+                        holder.retweetButton.setImageResource(R.drawable.ic_action_repeat_dark);
+                        holder.retweetButton.setColorFilter(settings.themeColors.accentColor, PorterDuff.Mode.MULTIPLY);
+                    } else {
+                        if(!settings.darkTheme) {
+                            holder.retweetButton.setImageResource(R.drawable.ic_action_repeat_light);
+                            holder.retweetButton.setColorFilter(Color.BLACK);
+                        } else {
+                            holder.retweetButton.clearColorFilter();
+                        }
+                    }
+                }
+            });
         }
 
         if (holder.quickActions != null) {
@@ -896,7 +987,7 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
                                     .apply();
                         }
 
-                        ImageViewerActivity.Companion.startActivity(context, id, holder.image, holder.picUrl.split(" "));
+                        ImageViewerActivity.Companion.startActivity(context, id, holder.image, holder.imageTouchListener.getImageTouchPosition(), holder.picUrl.split(" "));
                         debounceClick(holder.imageHolder);
                     }
                 });
@@ -1021,7 +1112,7 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
                                     Peek.into(R.layout.peek_image, new SimpleOnPeek() {
                                         @Override
                                         public void onInflated(View rootView) {
-                                            Glide.with(context).load(holder.picUrl.split(" ")[0])
+                                            Glide.with(context).load(holder.picUrl.split(" ")[holder.imageTouchListener.getImageTouchPosition()])
                                                     .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                                     .into((ImageView) rootView.findViewById(R.id.image));
                                         }
@@ -1105,7 +1196,7 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
                         Peek.into(R.layout.peek_image, new SimpleOnPeek() {
                             @Override
                             public void onInflated(View rootView) {
-                                Glide.with(context).load(holder.picUrl.split(" ")[0])
+                                Glide.with(context).load(holder.picUrl.split(" ")[holder.imageTouchListener.getImageTouchPosition()])
                                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                                         .into((ImageView) rootView.findViewById(R.id.image));
                             }
@@ -1314,7 +1405,7 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
             }
         }).start();
 
-        final int expansionSize = Utils.toDP(64, context);
+        final int expansionSize = Utils.toDP(settings.alwaysShowButtons ? 48 : 64, context);
         ValueAnimator heightAnimatorContent = ValueAnimator.ofInt(0, expansionSize);
         heightAnimatorContent.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -1341,7 +1432,10 @@ public class TimeLineCursorAdapter extends CursorAdapter implements WebPreviewCa
                 holder.expandArea.invalidate();
 
                 holder.expandArea.addView(counts);
-                holder.expandArea.addView(buttons);
+
+                if (!settings.alwaysShowButtons) {
+                    holder.expandArea.addView(buttons);
+                }
             }
         });
 

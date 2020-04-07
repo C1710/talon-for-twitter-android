@@ -21,6 +21,10 @@ public class AnalyticsHelper {
 
     // GENERAL LOGGING
     private static final String ERROR_LOADING_FROM_NOTIFICATION = "ERROR_LOADING_FROM_NOTIFICATION";
+    private static final String APP_NOT_PURCHASED = "APP_NOT_PURCHASED";
+    private static final String APP_NOT_PURCHASED_FIRST_WARNING = "APP_NOT_PURCHASED_FIRST_WARNING";
+    private static final String APP_NOT_PURCHASED_LAST_WARNING = "APP_NOT_PURCHASED_LAST_WARNING";
+    private static final String APP_PURCHASED = "APP_PURCHASED";
 
     private static void logEvent(Context context, String event) {
         Bundle bundle = new Bundle();
@@ -64,5 +68,21 @@ public class AnalyticsHelper {
         Bundle bundle = new Bundle();
         bundle.putString("error_message", errorMessage);
         logEvent(context, ERROR_LOADING_FROM_NOTIFICATION);
+    }
+
+    public static void appNotPurchased(Context context) {
+        logEvent(context, APP_NOT_PURCHASED);
+    }
+
+    public static void appNotPurchasedFirstWarning(Context context) {
+        logEvent(context, APP_NOT_PURCHASED_FIRST_WARNING);
+    }
+
+    public static void appNotPurchasedLastWarning(Context context) {
+        logEvent(context, APP_NOT_PURCHASED_LAST_WARNING);
+    }
+
+    public static void appPurchased(Context context) {
+        logEvent(context, APP_PURCHASED);
     }
 }

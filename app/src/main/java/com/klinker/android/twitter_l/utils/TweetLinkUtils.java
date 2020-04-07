@@ -439,27 +439,15 @@ public class TweetLinkUtils {
                 String url = e.getMediaURL().replace("tweet_video_thumb", "tweet_video").replace(".png", ".mp4").replace(".jpg", ".mp4").replace(".jpeg", ".mp4");
                 return new TweetMediaInformation(url, e.getVideoDurationMillis());
             } else if (e.getType().equals("surfaceView") || e.getType().equals("video")) {
-                if (e.getVideoVariants().length > 0) {
+                MediaEntity.Variant variants[] = e.getVideoVariants();
+                if (variants.length > 0) {
                     String url = "";
-                    MediaEntity.Variant variants[] = e.getVideoVariants();
 
-                    if (variants.length == 0) {
-                        return new TweetMediaInformation(url, e.getVideoDurationMillis());
-                    }
-
-                    for (int i = variants.length - 1; i >= 0; i--) {
-                        MediaEntity.Variant v = variants[i];
-                        if (v.getUrl().contains(".mp4")) {
+                    int largestBitrate = 0;
+                    for (MediaEntity.Variant v : variants) {
+                        if ((v.getUrl().contains(".mp4") || v.getUrl().contains(".m3u8")) && v.getBitrate() > largestBitrate) {
                             url = v.getUrl();
-                        }
-                    }
-
-                    if (url.isEmpty()) {
-                        for (int i = variants.length - 1; i >= 0; i--) {
-                            MediaEntity.Variant v = variants[i];
-                            if (v.getUrl().contains(".m3u8")) {
-                                url = v.getUrl();
-                            }
+                            largestBitrate = v.getBitrate();
                         }
                     }
 

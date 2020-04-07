@@ -18,11 +18,15 @@
 
 <resources>
 
-    <style name="Theme.TalonBlack.Base" parent="Theme.AppCompat">
+    <style name="Theme.TalonBlack.Base" parent="Theme.AppCompat.DayNight">
 
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">false</item>
         <!-- <item name="android:windowAllowExitTransitionOverlap">false</item> -->
+
+        <item name="android:textColor">@color/dark_text</item>
+        <item name="android:textColorPrimary">@color/dark_text</item>
+        <item name="android:textColorSecondary">@color/dark_text_secondary</item>
 
         <!-- For Slidr -->
         <item name="android:windowIsTranslucent">true</item>
@@ -171,11 +175,15 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-    <style name="Theme.TalonBlack.Main" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.TalonBlack.Main" parent="Theme.AppCompat.DayNight.NoActionBar">
 
         <!-- enable window content transitions -->
         <item name="android:windowContentTransitions">false</item>
         <!-- <item name="android:windowAllowExitTransitionOverlap">false</item> -->
+
+        <item name="android:textColor">@color/dark_text</item>
+        <item name="android:textColorPrimary">@color/dark_text</item>
+        <item name="android:textColorSecondary">@color/dark_text_secondary</item>
 
         <item name="android:colorControlHighlight">@color/dark_ripple</item>
 

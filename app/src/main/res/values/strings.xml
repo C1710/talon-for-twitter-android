@@ -13,7 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
   -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"  tools:ignore="MissingTranslation">
     <string name="app_name">Talon</string>
     <string name="app_name_full">Talon for Twitter</string>
     <string name="extension_description">Displays the number of unread tweets, mentions and direct messages as they are updated.</string>
@@ -388,6 +388,8 @@
     <string name="rate_it">Rate Talon</string>
     <string name="talon_settings">Talon Settings</string>
     <string name="feature_requests">Feature Requests</string>
+    <string name="alway_show_tweet_buttons">Always Show Tweet Actions</string>
+    <string name="alway_show_tweet_buttons_summary">Display the \"like\", \"retweet\", \"reply\", \"quote\", and \"share\" buttons below every tweet, on the timeline.</string>
     <!-- Emoji Keyboard -->
     <string name="recent">Recents</string>
     <string name="people">People</string>

@@ -1,5 +1,121 @@
 <changelog>
 
+    <version name="7.7.9">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.7.8">
+        <text>Dependency updates</text>
+    </version>
+
+    <version name="7.7.7">
+        <text>Well, would you look at that... I found a work around. You can now view who "likes" a tweet, again.</text>
+    </version>
+
+    <version name="7.7.6">
+        <text>Seeing the users that liked a tweet was never something that Twitter officially supported for third party apps. Recently, they have disabled the workaround that I used to obtain this information.</text>
+        <text>Until I can find an alternative solution, seeing who "liked" a tweet has been disabled.</text>
+    </version>
+
+    <version name="7.7.5">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.7.4">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.7.3">
+        <text>Dependency updates</text>
+    </version>
+
+    <version name="7.7.2">
+        <text>Colorize the like and retweet buttons, when using the always active tweet action buttons</text>
+    </version>
+
+    <version name="7.7.1">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.7.0">
+        <text>With App Style settings, there is now a preference to force the app to always show the tweet actions (like, retweet, ect), below the tweets on your timeline</text>
+        <text>Updates to the default theme</text>
+    </version>
+
+    <version name="7.6.5">
+        <text>Improvements for Android Q</text>
+    </version>
+
+    <version name="7.6.4">
+        <text>Improvement to video playback quality</text>
+        <text>Fixes for Android 4.4</text>
+    </version>
+
+    <version name="7.6.3">
+        <text>Tweetmarker is unfortunately being shut down. It has been removed from Talon. For more information: https://www.manton.org/2019/05/15/saying-goodbye-to.html</text>
+        <text>Fix the overflow menu coloring, on dark or black themes</text>
+    </version>
+
+    <version name="7.6.2">
+        <text>Continued improvements for Android Q</text>
+    </version>
+
+    <version name="7.6.1">
+        <text>Android Q: manually specify light vs dark theme, separate from the system theme.</text>
+    </version>
+
+    <version name="7.6.0">
+        <text>Android Q: Theme support improvements. Talon will now follow your system default theme for light/dark support.</text>
+        <text>Dark theme color improvements</text>
+    </version>
+
+    <version name="7.5.11">
+        <text>UI improvements</text> <!-- specifically for Android Q, around the article/drag dismiss library adjusting for edge to edge content -->
+    </version>
+
+    <version name="7.5.10">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.5.8">
+        <text>UI improvements</text>
+    </version>
+
+    <version name="7.5.7">
+        <text>Improvements to loading videos</text>
+    </version>
+
+    <version name="7.5.6">
+        <text>Fix Google Translate support</text>
+    </version>
+
+    <version name="7.5.5">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.5.4">
+        <text>Translation updates</text>
+    </version>
+
+    <version name="7.5.3">
+        <text>Improve load times of the article previews on the timeline</text>
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.5.2">
+        <text>Bug fixes and build process improvements</text>
+    </version>
+
+    <version name="7.5.1">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.5.0">
+        <text>Open tweet details when looking through a users list of images on their profiles.</text>
+        <text>Improvements to handling tweets with multiple images</text>
+        <text>Dependency updates and bug fixes</text>
+    </version>
+
     <version name="7.4.1">
         <text>Twitter is shutting down their streaming services. I have removed Talon Pull from the app, as it will no longer work.</text>
         <text>Other updates to work with the latest Twitter APIs.</text>
@@ -57,7 +173,7 @@
     </version>
 
     <version name="7.1.1">
-        <text>Twitter has a new policy that all apps using their service should stop allowing for tweeting, liking, and retweeting using multiple accounts at once: https://blog.twitter.com/developer/en_us/topics/tips/2018/automation-and-the-use-of-multiple-accounts.html. I have unfortunately had to remove this functionality from Talon.</text>
+        <text>Twitter has a new policy that all apps using their service should stop allowing for tweeting, liking, and retweeting using multiple accounts at once: https://blog.twitter.com/developer/en_us/topics/tips/2019/automation-and-the-use-of-multiple-accounts.html. I have unfortunately had to remove this functionality from Talon.</text>
         <text>Translation updates</text>
     </version>
 
@@ -77,7 +193,7 @@
 
     <version name="7.0.3">
         <text>Bug fixes around threads/discussion</text>
-        <text>Enable the 2018 supporter option in settings</text>
+        <text>Enable the 2019 supporter option in settings</text>
     </version>
 
     <version name="7.0.2">
@@ -359,7 +475,7 @@
     </version>
 
     <version name="5.8.0">
-        <text>If you love my work, become a 2017 supporter from the settings menu!</text>
+        <text>If you love my work, become a 2019 supporter from the settings menu!</text>
         <text>Search all the users on Twitter when auto-completing a mention in a tweet</text>
         <text>Option to change the widget's text size separate from the app's text size</text>
         <text>Absolute date formats can now be used on the compact tweet layout</text>

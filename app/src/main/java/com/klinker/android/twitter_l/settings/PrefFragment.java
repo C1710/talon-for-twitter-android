@@ -82,6 +82,7 @@ import twitter4j.Paging;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.User;
+import xyz.klinker.android.drag_dismiss.util.AndroidVersionUtils;
 
 public class PrefFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -1126,55 +1127,10 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
 
         });
 
-        /*Preference download = findPreference("download_portal");
-        download.setSummary(context.getResources().getString(R.string.download_portal_summary) + "\n\n" + context.getResources().getString(R.string.currently_in_beta));
-        download.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                try {
-                    File f = new File(Environment.getExternalStorageDirectory() + "/Download/" + "klinker-apps-portal.apk");
-                    f.delete();
-                } catch (Exception e) {
-
-                }
-                final DownloadManager dm = (DownloadManager) context.getSystemService(Activity.DOWNLOAD_SERVICE);
-                DownloadManager.Request request = new DownloadManager.Request(
-                        Uri.parse("http://klinkerapps.com/dev-upload/repository/lklinker/klinker-apps-portal.apk"));
-                final long enqueue = dm.enqueue(request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI|DownloadManager.Request.NETWORK_MOBILE)
-                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "klinker-apps-portal.apk"));
-
-                BroadcastReceiver receiver = new BroadcastReceiver() {
-                    @Override
-                    public void onReceive(Context context, Intent intent) {
-                        String action = intent.getAction();
-                        if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                            long downloadId = intent.getLongExtra(
-                                    DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-                            DownloadManager.Query mentionsQuery = new DownloadManager.Query();
-                            mentionsQuery.setFilterById(enqueue);
-                            Cursor c = dm.mentionsQuery(mentionsQuery);
-                            if (c.moveToFirst()) {
-                                int columnIndex = c
-                                        .getColumnIndex(DownloadManager.COLUMN_STATUS);
-                                if (DownloadManager.STATUS_SUCCESSFUL == c
-                                        .getInt(columnIndex)) {
-
-                                    Intent install = new Intent(Intent.ACTION_VIEW);
-                                    install.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/Download/" + "klinker-apps-portal.apk")), "application/vnd.android.package-archive");
-                                    startActivity(install);
-                                }
-                            }
-
-                        }
-                    }
-                };
-
-                context.registerReceiver(receiver, new IntentFilter(
-                        DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-                return false;
-            }
-        });*/
-
+        if (AndroidVersionUtils.isAndroidQ()) {
+            PreferenceCategory colorOptions = (PreferenceCategory) findPreference("color_options_ground");
+            colorOptions.removePreference(nightMode);
+        }
     }
 
     public String getTime(int hours, int mins, boolean militaryTime) {
@@ -1308,7 +1264,7 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
         notification.setOnPreferenceChangeListener(click);
 
         if (Utils.isAndroidO()) {
-            //((PreferenceCategory) findPreference("advanced-notifications")).removePreference(findPreference("alert_types"));
+            ((PreferenceCategory) findPreference("advanced-notifications")).removePreference(findPreference("alert_types"));
         } else {
             ((PreferenceCategory) findPreference("advanced-notifications")).removePreference(findPreference("notification_channels"));
         }
@@ -1863,15 +1819,6 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
             }
         });
 
-        Preference gPlus = findPreference("google_plus");
-        gPlus.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://goo.gl/KCXlZk")));
-                return false;
-            }
-        });
-
         Preference email = findPreference("email_me");
         email.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -1960,7 +1907,6 @@ public class PrefFragment extends PreferenceFragment implements SharedPreference
                 return false;
             }
         });
-
     }
 
     public void setUpOtherAppSettings() {

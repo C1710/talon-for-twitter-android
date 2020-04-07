@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import com.klinker.android.twitter_l.activities.compose.LauncherCompose;
 
@@ -14,6 +14,7 @@ public class ComposeTileService extends TileService {
     @Override
     public void onClick() {
         Intent compose = new Intent(this, LauncherCompose.class);
+        compose.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivityAndCollapse(compose);
     }
 

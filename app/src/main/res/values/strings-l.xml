@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation,ExtraTranslation">
     <string name="fast_transitions">Quick Transitions</string>
     <string name="help">Help</string>
     <string name="send_feedback">Send Feedback</string>
@@ -91,8 +91,8 @@
     <string name="no_pictures">No Pictures</string>
     <string name="quick_actions">Quick Actions</string>
     <string name="liked_status">Like Successful</string>
-    <string name="become_supporter">Become a 2018 SUPPORTER</string>
-    <string name="are_supporter">You are a 2018 SUPPORTER!</string>
+    <string name="become_supporter">Become a 2019 SUPPORTER</string>
+    <string name="are_supporter">You are a 2019 SUPPORTER!</string>
     <string name="are_supporter_summary">Thanks! Your support is immensely appreciated. If there is anything I can do, don\'t hesitate to ask.</string>
     <string name="tweetmarker_disclaimer">Automatic TweetMarker will always refresh the timeline on startup of the app.</string>
     <string name="discover_people">People</string>
@@ -117,7 +117,7 @@
     <string name="background">Background</string>
     <string name="advanced">Advanced</string>
     <string name="data_saving_settings">Data Saving Options</string>
-    <string name="supporter_2016">2018 Supporter</string>
+    <string name="supporter_2016">2019 Supporter</string>
     <string name="app_style">App Style</string>
     <string name="in_app_browser">In-App Browser</string>
     <string name="location">Location</string>
@@ -229,13 +229,13 @@
 
     <string name="rate_it_button">Rate it!</string>
     <string name="rate_it_title">Top ratings go a long way</string>
-    <string name="rate_it_summary"><b>5-star ratings</b> are extremely helpful to the app\'s growth
-        and visibility on the Play Store. If you want to see the app <i>continue to soar</i>, help me out!</string>
-    <string name="rate_it_not_ready">Not ready to rate it? No problem. Back out of this dialog and I will never ask again.</string>
+    <string name="rate_it_no_thanks">No thanks</string>
+    <string name="rate_it_summary">Reviews are extremely helpful to the app\'s growth
+        and visibility on the Play Store. If you want to see the app <i>continue to soar</i>, please provide your feedback!</string>
     <string name="preview_web_links">Preview Web Links</string>
     <string name="seconds_ago">%1$d seconds ago</string>
     <string name="min_ago">%1$d minute ago</string>
-    <string name="mins_ago">%1$d minutes ago</string>
+    <string name="mins_ago">%1$d minutes ago</string>requl
     <string name="hour_ago">%1$d hour ago</string>
     <string name="new_hours_ago">%1$d hours ago</string>
     <string name="day_ago">%1$d day ago</string>
@@ -247,4 +247,36 @@
     <string name="auto_play_gifs_summary">By default, both GIFs and Twitter videos are played directly on the timeline.</string>
     <string name="data_saver_mode">Data Saver Mode</string>
     <string name="data_saver_mode_summary">This will override some of your current settings to give you the least amount of background data usage.</string>
+
+    <string name="no_content_home">No tweets!</string>
+    <string name="no_content_home_summary">To fill this page, start following some users. You can find people to follow from the Discover section, or by searching for different topics.</string>
+    <string name="no_content_mentions">No mentions!</string>
+    <string name="no_content_mentions_summary">To fill this page, talking to others, on Twitter. As they reply, their tweets will show up on this page.</string>
+    <string name="no_content_dms">No direct messages!</string>
+    <string name="no_content_dms_summary">To fill this page, you can start sending direct messages, on Twitter. You can start a new direct message from Talon\'s compose page.</string>
+    <string name="no_content_fav_tweets">No liked tweets!</string>
+    <string name="no_content_fav_tweets_summary">To fill this page, just like a user\'s status. As you like different tweets, they will show up on this page.</string>
+    <string name="no_content_lists">No tweets!</string>
+    <string name="no_content_lists_summary">To fill this page, start adding some user\'s to this list.</string>
+    <string name="no_content_save_searches">No tweets found!</string>
+    <string name="no_content_save_searches_summary">Try changing your search query.</string>
+    <string name="no_content_user_tweets">No tweets found!</string>
+    <string name="no_content_user_tweets_summary">As this user tweets, their statuses will show up here.</string>
+    <string name="no_content_saved_tweets_summary">Add a saved tweet by opening it, and selecting the option to save it for later.</string>
+    <string name="no_content_fav_users">No users found!</string>
+    <string name="no_content_fav_users_summary">If you favorite a user, from their profile, you will be able to quickly find and access them, from this page.</string>
+    <string name="no_content_retweets">No retweets found!</string>
+    <string name="no_content_retweets_summary">As you interact on Twitter, this page will show all of your personal tweets that have been retweeted by others.</string>
+    <string name="no_content_saved_searches">No saved searches!</string>
+    <string name="no_content_saved_searches_summary">To quickly look back at old searches, you can save that search for later. When you do, they will appear on this page.</string>
+    <string name="no_content_lists_page">No lists created!</string>
+    <string name="no_content_lists_page_summary">You can create a list from the option in the three dot overflow menu. After creating a list, add users to that list to quickly find their content.</string>
+    <string name="no_content_local_trends">You must accept the location permission, to view nearby activity. You can grant this permission, through your system level settings.</string>
+
+    <string name="storage_permission">Storage Permission</string>
+    <string name="no_storage_permission">Talon needs the storage permission to be able to save media. You can grant this permission from your system settings.</string>
+    <string name="video_permissions">Permissions Required</string>
+    <string name="no_video_permission_first_time">Talon needs both the camera and the microphone permission, to be able to record videos. Please accept this permission to continue.</string>
+    <string name="no_video_permission">Talon needs both the camera and the microphone permission, to be able to record videos. You can grant this permission from your system settings.</string>
+    <string name="system_default">System Default (Light or Dark)</string>
 </resources>

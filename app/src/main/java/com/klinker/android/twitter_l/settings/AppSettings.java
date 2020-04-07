@@ -1,5 +1,6 @@
 package com.klinker.android.twitter_l.settings;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -7,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.util.Log;
+
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.klinker.android.twitter_l.BuildConfig;
 import com.klinker.android.twitter_l.R;
@@ -20,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import xyz.klinker.android.drag_dismiss.util.AndroidVersionUtils;
 
 public class AppSettings {
 
@@ -70,8 +75,8 @@ public class AppSettings {
     public static final int THEME_DARK_BACKGROUND_COLOR = 20;
     public static final int THEME_WHITE = 21;
 
-    public static final int DEFAULT_THEME = THEME_LIGHT_BLUE;
-    public static final int DEFAULT_MAIN_THEME = 1; // 0 = light, 1 = dark, 2 = black
+    public static final int DEFAULT_THEME = THEME_DARK_BACKGROUND_COLOR;
+    public static final int DEFAULT_MAIN_THEME = AndroidVersionUtils.isAndroidQ() ? 4 : 1; // 0 = light, 1 = dark, 2 = black (Android Q is a bit different)
 
     public static final int WIDGET_LIGHT = 0;
     public static final int WIDGET_DARK = 1;
@@ -204,6 +209,7 @@ public class AppSettings {
     public boolean webPreviews;
     public boolean widgetDisplayScreenname;
     public boolean onlyAutoPlayGifs;
+    public boolean alwaysShowButtons;
 
     // notifications
     public boolean timelineNot;
@@ -310,10 +316,12 @@ public class AppSettings {
         baseTheme = Integer.parseInt(sharedPrefs.getString("main_theme_string", "" + DEFAULT_MAIN_THEME));
         switch (baseTheme) {
             case 0:
+            case 3:
                 darkTheme = false;
                 blackTheme = false;
                 break;
             case 1:
+            case 4:
                 darkTheme = true;
                 blackTheme = false;
                 break;
@@ -321,6 +329,31 @@ public class AppSettings {
                 darkTheme = true;
                 blackTheme = true;
                 break;
+        }
+
+        if (!AndroidVersionUtils.isAndroidQ()) {
+            int currentTheme = AppSettings.getCurrentTheme(context, sharedPrefs);
+            boolean isNight = currentTheme == 1 || currentTheme == 2;
+            AppCompatDelegate.setDefaultNightMode(isNight ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        } else if (baseTheme == 3 || baseTheme == 4) {
+            boolean isNight = baseTheme == 4;
+            AppCompatDelegate.setDefaultNightMode(isNight ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        if (AndroidVersionUtils.isAndroidQ()) {
+            if (baseTheme < 2) {
+                // we want to use the system level theme instead
+                int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                darkTheme = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
+                nightMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
+                baseTheme = darkTheme ? 1 : 0;
+
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+            } else if (baseTheme == 3) {
+                baseTheme = 0;
+            } else if (baseTheme == 4) {
+                baseTheme = 1;
+            }
         }
 
         isTwitterLoggedIn = sharedPrefs.getBoolean("is_logged_in_1", false) || sharedPrefs.getBoolean("is_logged_in_2", false);
@@ -384,6 +417,7 @@ public class AppSettings {
         webPreviews = sharedPrefs.getBoolean("web_previews_timeline", true);
         widgetDisplayScreenname = sharedPrefs.getBoolean("widget_display_screenname", true);
         onlyAutoPlayGifs = sharedPrefs.getBoolean("autoplay_gifs", false);
+        alwaysShowButtons = sharedPrefs.getBoolean("always_show_tweet_buttons", false);
 
         String emojiStyle = sharedPrefs.getString("emoji_style", "android_o");
         switch (emojiStyle) {
@@ -413,18 +447,8 @@ public class AppSettings {
             sharedPrefs.edit().putBoolean("pre_cache_wifi_only", false).apply();
         }
 
-        // set up tweetmarker
-        String val = sharedPrefs.getString("tweetmarker_options", "0");
-        if (val.equals("0")) {
-            tweetmarker = false;
-            tweetmarkerManualOnly = false;
-        } else if (val.equals("1")) {
-            tweetmarker = true;
-            tweetmarkerManualOnly = false;
-        } else {
-            tweetmarkerManualOnly = true;
-            tweetmarker = true;
-        }
+        tweetmarker = false;
+        tweetmarkerManualOnly = false;
 
         // set up the mobilized (plain text) browser
         String mobilize = sharedPrefs.getString("plain_text_browser", "0");
@@ -460,7 +484,11 @@ public class AppSettings {
 
         // Integers
         currentAccount = sharedPrefs.getInt("current_account", 1);
-        theme = sharedPrefs.getInt("material_theme_" + currentAccount, DEFAULT_THEME);
+        try {
+            theme = sharedPrefs.getInt("material_theme_" + currentAccount, DEFAULT_THEME);
+        } catch (ClassCastException e) {
+            theme = Integer.parseInt(sharedPrefs.getString("material_theme_" + currentAccount, "" + DEFAULT_THEME));
+        }
         layout = LAYOUT_FULL_SCREEN;
         textSize = Integer.parseInt(sharedPrefs.getString("text_size", "14"));
         widgetTextSize = Integer.parseInt(sharedPrefs.getString("widget_text_size", "14"));
@@ -494,9 +522,9 @@ public class AppSettings {
         activityRefresh = Long.parseLong(sharedPrefs.getString("activity_sync_interval", "0"));
         listRefresh = Long.parseLong(sharedPrefs.getString("list_sync_interval", "0"));
 
-        translateUrl = sharedPrefs.getString("translate_url", "https://translate.google.com/#auto|en|");
+        translateUrl = sharedPrefs.getString("translate_url", "https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=");
 
-        if (baseTheme != 2 && sharedPrefs.getBoolean("night_mode", false)) {
+        if (baseTheme != 2 && sharedPrefs.getBoolean("night_mode", false) && !AndroidVersionUtils.isAndroidQ()) {
             int startHour = sharedPrefs.getInt("night_start_hour", 22);
             int startMin = sharedPrefs.getInt("night_start_min", 0);
             int endHour = sharedPrefs.getInt("day_start_hour", 6);
@@ -590,15 +618,17 @@ public class AppSettings {
         }
     }
 
-    public static int getCurrentTheme(SharedPreferences sharedPrefs) {
+    public static int getCurrentTheme(Context context, SharedPreferences sharedPrefs) {
         boolean dark = false;
         boolean black = false;
         int mainTheme = Integer.parseInt(sharedPrefs.getString("main_theme_string", "" + DEFAULT_MAIN_THEME));
         switch (mainTheme) {
             case 0:
+            case 3:
                 dark = false;
                 break;
             case 1:
+            case 4:
                 dark = true;
                 break;
             case 2:
@@ -607,16 +637,22 @@ public class AppSettings {
                 break;
         }
 
-        if (sharedPrefs.getBoolean("night_mode", false)) {
-            int startHour = sharedPrefs.getInt("night_start_hour", 22);
-            int startMin = sharedPrefs.getInt("night_start_min", 0);
-            int endHour = sharedPrefs.getInt("day_start_hour", 6);
-            int endMin = sharedPrefs.getInt("day_start_min", 0);
+        if (AndroidVersionUtils.isAndroidQ() && mainTheme < 2) {
+            // we want to use the system level theme instead
+            int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            dark = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
+        } else {
+            if (sharedPrefs.getBoolean("night_mode", false) && !AndroidVersionUtils.isAndroidQ()) {
+                int startHour = sharedPrefs.getInt("night_start_hour", 22);
+                int startMin = sharedPrefs.getInt("night_start_min", 0);
+                int endHour = sharedPrefs.getInt("day_start_hour", 6);
+                int endMin = sharedPrefs.getInt("day_start_min", 0);
 
-            if (startHour == -1 || isInsideRange(startHour, startMin, endHour, endMin)) {
-                dark = true;
-                if (sharedPrefs.getBoolean("night_mode_black", false)) {
-                    black = true;
+                if (startHour == -1 || isInsideRange(startHour, startMin, endHour, endMin)) {
+                    dark = true;
+                    if (sharedPrefs.getBoolean("night_mode_black", false)) {
+                        black = true;
+                    }
                 }
             }
         }
@@ -632,7 +668,6 @@ public class AppSettings {
 
     protected void setValue(String key, boolean value, Context context) {
         SharedPreferences sharedPreferences = AppSettings.getSharedPreferences(context);
-
 
         sharedPreferences.edit()
                 .putBoolean(key, value)

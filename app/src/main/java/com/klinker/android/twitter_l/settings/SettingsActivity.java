@@ -26,7 +26,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.*;
 import android.widget.LinearLayout;
@@ -64,7 +64,7 @@ public class SettingsActivity extends WhiteToolbarActivity {
                 .replace(R.id.settings_content, new MainPrefFrag())
                 .commit();
 
-        android.support.v7.app.ActionBar ab = getSupportActionBar();
+        androidx.appcompat.app.ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowHomeEnabled(true);
         ab.setIcon(null);
@@ -211,7 +211,7 @@ public class SettingsActivity extends WhiteToolbarActivity {
 
                     SharedPreferences sharedPreferences = AppSettings.getSharedPreferences(this);
 
-                    sharedPreferences.edit().putBoolean("2018_supporter", true).commit();
+                    sharedPreferences.edit().putBoolean("2019_supporter", true).commit();
 
                     recreate();
                 } catch (JSONException e) {

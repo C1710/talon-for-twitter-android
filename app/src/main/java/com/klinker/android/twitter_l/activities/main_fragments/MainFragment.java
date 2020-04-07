@@ -11,10 +11,12 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -48,11 +50,12 @@ public abstract class MainFragment extends Fragment implements Expandable {
     protected TextView toastButton;
     protected MaterialSwipeRefreshLayout refreshLayout;
     protected LinearLayout spinner;
+    protected LinearLayout noContent;
 
     protected SharedPreferences sharedPrefs;
     protected Activity context;
 
-    protected android.support.v7.app.ActionBar actionBar;
+    protected androidx.appcompat.app.ActionBar actionBar;
     protected int mActionBarSize;
 
     protected int currentAccount;
@@ -229,7 +232,6 @@ public abstract class MainFragment extends Fragment implements Expandable {
 
         sharedPrefs = AppSettings.getSharedPreferences(context);
 
-
         setAppSettings();
         setHome();
 
@@ -292,6 +294,31 @@ public abstract class MainFragment extends Fragment implements Expandable {
         spinner = (LinearLayout) layout.findViewById(R.id.spinner);
     }
 
+    protected void setNoContent(View layout) {
+        noContent = (LinearLayout) layout.findViewById(R.id.no_content);
+
+        if (noContent == null) {
+            return;
+        }
+
+        ImageView noActivityPic = (ImageView) noContent.findViewById(R.id.picture);
+        noActivityPic.getDrawable().setColorFilter(settings.themeColors.primaryColor, PorterDuff.Mode.MULTIPLY);
+
+        TextView noContentTitle = (TextView) noContent.findViewById(R.id.no_content_title);
+        noContentTitle.setText(getNoContentTitle());
+
+        TextView noContentSummary = (TextView) noContent.findViewById(R.id.no_content_summary);
+        noContentSummary.setText(getNoContentSummary());
+    }
+
+    protected String getNoContentTitle() {
+        return getString(R.string.no_content_home);
+    }
+
+    protected String getNoContentSummary() {
+        return getString(R.string.no_content_home_summary);
+    }
+
     private View rootLayout;
     public void setViews(View layout) {
 
@@ -299,6 +326,7 @@ public abstract class MainFragment extends Fragment implements Expandable {
 
         listView = (ListView) layout.findViewById(R.id.listView);
         setSpinner(layout);
+        setNoContent(layout);
 
         refreshLayout = (MaterialSwipeRefreshLayout) layout.findViewById(R.id.swipe_refresh_layout);
         refreshLayout.setOnRefreshListener(new MaterialSwipeRefreshLayout.OnRefreshListener() {

@@ -1,25 +1,18 @@
 package com.klinker.android.twitter_l.utils;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.support.customtabs.CustomTabsIntent;
-import android.util.Log;
+
+import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.klinker.android.twitter_l.APIKeys;
 import com.klinker.android.twitter_l.R;
 import com.klinker.android.twitter_l.settings.AppSettings;
 import com.klinker.android.twitter_l.activities.BrowserActivity;
-import com.klinker.android.twitter_l.activities.PlainTextBrowserActivity;
 
 import java.util.Random;
 
@@ -133,18 +126,19 @@ public class WebIntentBuilder {
             }
 
             WebIntentBuilder.JUST_RAN = true;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) { }
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) { }
 
-                    WebIntentBuilder.JUST_RAN = false;
-                }
+                WebIntentBuilder.JUST_RAN = false;
             }).start();
         } else {
-            context.startActivity(intent);
+            try {
+                context.startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -34,10 +34,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.SearchRecentSuggestions;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.*;
@@ -54,7 +54,6 @@ import com.klinker.android.twitter_l.adapters.InteractionsCursorAdapter;
 import com.klinker.android.twitter_l.adapters.MainDrawerArrayAdapter;
 import com.klinker.android.twitter_l.adapters.TimelinePagerAdapter;
 import com.klinker.android.twitter_l.data.sq_lite.*;
-import com.klinker.android.twitter_l.listeners.InteractionClickListener;
 import com.klinker.android.twitter_l.listeners.MainDrawerClickListener;
 import com.klinker.android.twitter_l.views.NavBarOverlayLayout;
 import com.klinker.android.twitter_l.settings.AppSettings;
@@ -73,6 +72,7 @@ import com.klinker.android.twitter_l.utils.XmlFaqUtils;
 
 import de.timroes.android.listview.EnhancedListView;
 import me.leolin.shortcutbadger.ShortcutBadger;
+import xyz.klinker.android.drag_dismiss.util.AndroidVersionUtils;
 
 import java.lang.reflect.Field;
 
@@ -82,7 +82,7 @@ public abstract class DrawerActivity extends WhiteToolbarActivity implements Sys
     public Activity context;
     public SharedPreferences sharedPrefs;
 
-    public android.support.v7.app.ActionBar actionBar;
+    public androidx.appcompat.app.ActionBar actionBar;
 
     public static ViewPager mViewPager;
     public TimelinePagerAdapter mSectionsPagerAdapter;
@@ -136,6 +136,14 @@ public abstract class DrawerActivity extends WhiteToolbarActivity implements Sys
         Utils.setTaskDescription(this);
     }
 
+    protected String getNoContentTitle() {
+        return getString(R.string.no_content_home);
+    }
+
+    protected String getNoContentSummary() {
+        return getString(R.string.no_content_home_summary);
+    }
+
     private SearchUtils searchUtils;
 
     public void setUpDrawer(int number, final String actName) {
@@ -153,7 +161,14 @@ public abstract class DrawerActivity extends WhiteToolbarActivity implements Sys
         ((RelativeLayout.LayoutParams) profilePic2Image.getLayoutParams()).topMargin = Utils.toDP(12, context) + statusBarHeight;
         profilePic2Image.invalidate();
 
+        ImageView noActivityPic = (ImageView) findViewById(R.id.picture);
+        if (noActivityPic != null) noActivityPic.getDrawable().setColorFilter(settings.themeColors.primaryColor, PorterDuff.Mode.MULTIPLY);
 
+        TextView noContentTitle = (TextView) findViewById(R.id.no_content_title);
+        if (noContentTitle != null) noContentTitle.setText(getNoContentTitle());
+
+        TextView noContentSummary = (TextView) findViewById(R.id.no_content_summary);
+        if (noContentSummary != null) noContentSummary.setText(getNoContentSummary());
 
         searchUtils = new SearchUtils(this);
         searchUtils.setUpSearch();
@@ -859,10 +874,14 @@ public abstract class DrawerActivity extends WhiteToolbarActivity implements Sys
             status.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
 
-
-        Switch nightModeSwitch = (Switch) findViewById(R.id.night_mode_switch);
-        if (nightModeSwitch != null) {
-            nightModeSwitch.setChecked(sharedPrefs.getBoolean("night_mode", false));
+        if (AndroidVersionUtils.isAndroidQ()) {
+            View nightMode = findViewById(R.id.night_mode_container);
+            nightMode.setVisibility(View.GONE);
+        } else {
+            Switch nightModeSwitch = (Switch) findViewById(R.id.night_mode_switch);
+            if (nightModeSwitch != null) {
+                nightModeSwitch.setChecked(sharedPrefs.getBoolean("night_mode", false));
+            }
         }
     }
 
@@ -1100,7 +1119,7 @@ public abstract class DrawerActivity extends WhiteToolbarActivity implements Sys
         }
     }
 
-    private void logoutFromTwitter() {
+    public void logoutFromTwitter() {
 
         context.sendBroadcast(new Intent("com.klinker.android.STOP_PUSH_SERVICE"));
 

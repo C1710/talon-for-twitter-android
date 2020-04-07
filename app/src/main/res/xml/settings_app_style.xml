@@ -31,6 +31,7 @@
         android:entryValues="@array/timeline_pictures_inserted"/>
 
     <com.klinker.android.twitter_l.views.preference.MaterialPreferenceCategory
+        android:key="color_options_ground"
         android:title="@string/color_options" >
 
         <ListPreference
@@ -93,6 +94,12 @@
 
     <com.klinker.android.twitter_l.views.preference.MaterialPreferenceCategory
         android:title="@string/advanced" >
+
+        <SwitchPreference
+            android:key="always_show_tweet_buttons"
+            android:title="@string/alway_show_tweet_buttons"
+            android:summary="@string/alway_show_tweet_buttons_summary"
+            android:defaultValue="false" />
 
         <SwitchPreference
             android:key="detailed_quotes"

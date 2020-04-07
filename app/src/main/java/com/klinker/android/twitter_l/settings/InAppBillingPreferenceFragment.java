@@ -13,9 +13,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.preference.PreferenceFragment;
-import android.support.design.widget.Snackbar;
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.widget.Toast;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.klinker.android.twitter_l.R;
@@ -74,7 +73,7 @@ public class InAppBillingPreferenceFragment extends PreferenceFragment {
 
                     SharedPreferences sharedPreferences = AppSettings.getSharedPreferences(getActivity());
 
-                    sharedPreferences.edit().putBoolean("2018_supporter", true).commit();
+                    sharedPreferences.edit().putBoolean("2019_supporter", true).commit();
                 } catch (JSONException e) {
                     alert("Uh oh... Something went wrong with the purchase: Failed to parse purchase data.");
                     e.printStackTrace();
@@ -98,7 +97,7 @@ public class InAppBillingPreferenceFragment extends PreferenceFragment {
     }
 
     protected void start2016SupporterPurchase(String amount) {
-        new StartPurchase("2018_supporter_" + amount).execute();
+        new StartPurchase("2019_supporter_" + amount).execute();
     }
 
     class ConsumeItems extends AsyncTask<Void, Void, Void> {
@@ -131,7 +130,7 @@ public class InAppBillingPreferenceFragment extends PreferenceFragment {
                             JSONObject purchaseData = new JSONObject(purchaseDataList.get(i));
                             consumePurchase(purchaseData);
 
-                            sharedPreferences.edit().putBoolean("2018_supporter", true).apply();
+                            sharedPreferences.edit().putBoolean("2019_supporter", true).apply();
                         }
 
                     }
