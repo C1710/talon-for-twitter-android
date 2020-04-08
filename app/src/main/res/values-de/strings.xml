@@ -725,4 +725,5 @@ Erwähnungen, neue Follower, Retweets und Likes Deiner Status werden hier ersche
     <string name="save_for_later">Speichern für später</string>
     <string name="remove_from_saved_tweets">Von den gespeicherten Tweets entfernen</string>
     <string name="add">Hinzufügen</string>
+    <string name="emoji_style_android_o">Benutzerdefiniert</string>
 </resources>
