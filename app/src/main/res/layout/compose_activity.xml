@@ -17,7 +17,8 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="?compose_window_background"
@@ -187,9 +188,20 @@
                             android:id="@+id/cancel1"
                             android:src="@drawable/ic_cancel_dark"
                             android:background="?android:selectableItemBackground"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp" />
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="12dp"/>
 
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/caption1"
+                            app:srcCompat="@drawable/ic_baseline_subtitles_24"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="12dp"
+                            android:background="?android:selectableItemBackground"
+                            android:contentDescription="@string/add_caption"
+                            android:layout_gravity="end|bottom"
+                            android:alpha="0.8"/>
                     </FrameLayout>
 
 
@@ -215,6 +227,17 @@
                             android:layout_width="32dp"
                             android:layout_height="32dp" />
 
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/caption2"
+                            app:srcCompat="@drawable/ic_baseline_subtitles_24"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="12dp"
+                            android:background="?android:selectableItemBackground"
+                            android:contentDescription="@string/add_caption"
+                            android:layout_gravity="end|bottom"
+                            android:alpha="0.8"/>
+
                     </FrameLayout>
 
                     <FrameLayout
@@ -238,6 +261,18 @@
                             android:background="?android:selectableItemBackground"
                             android:layout_width="32dp"
                             android:layout_height="32dp" />
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/caption3"
+                            app:srcCompat="@drawable/ic_baseline_subtitles_24"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="12dp"
+                            android:background="?android:selectableItemBackground"
+                            android:contentDescription="@string/add_caption"
+                            android:layout_gravity="end|bottom"
+                            android:alpha="0.8"/>
+
                     </FrameLayout>
 
                     <FrameLayout
@@ -261,6 +296,18 @@
                             android:background="?android:selectableItemBackground"
                             android:layout_width="32dp"
                             android:layout_height="32dp" />
+
+                        <androidx.appcompat.widget.AppCompatImageButton
+                            android:id="@+id/caption4"
+                            app:srcCompat="@drawable/ic_baseline_subtitles_24"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="12dp"
+                            android:background="?android:selectableItemBackground"
+                            android:contentDescription="@string/add_caption"
+                            android:layout_gravity="end|bottom"
+                            android:alpha="0.8"/>
+
                     </FrameLayout>
 
                     <View android:layout_width="16dp" android:layout_height="match_parent" />

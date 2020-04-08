@@ -289,7 +289,7 @@ public class ComposeActivity extends Compose {
                                                 dialog.dismiss();
                                             } else {
                                                 new AlertDialog.Builder(context)
-                                                        .setTitle(context.getResources().getString(R.string.apply))
+                                                        .setTitle(context.getResources().getString(R.string.add_new_tweet))
                                                         .setMessage(draftsAndDelete[item])
                                                         .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                                             @Override

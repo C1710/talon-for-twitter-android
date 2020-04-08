@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.klinker.android.twitter_l.views.widgets.text.EmojiableEditText
+        android:id="@+id/caption_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/caption_counter"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="20dp"
+        android:textColor="?textColor"
+        app:layout_constraintVertical_weight="0"
+        />
+
+    <TextView
+        android:id="@+id/caption_counter"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/caption_edit"
+        app:layout_constraintStart_toStartOf="@id/caption_edit"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintTop_toBottomOf="@id/caption_edit"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="8dp"
+        android:textColor="?textColor"
+        android:text="0/420"
+        android:textSize="12sp"
+        app:layout_constraintVertical_weight="1"
+        tools:ignore="HardcodedText" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,8 +15,10 @@ package com.klinker.android.twitter_l.activities.compose;
  * limitations under the License.
  */
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -25,11 +27,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BlendMode;
+import android.graphics.BlendModeColorFilter;
+import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.media.ExifInterface;
@@ -41,11 +48,15 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.os.Vibrator;
+
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.util.Pair;
+import androidx.fragment.app.DialogFragment;
+
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
@@ -54,6 +65,7 @@ import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.Window;
@@ -100,7 +112,9 @@ import java.lang.reflect.Field;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -126,6 +140,7 @@ public abstract class Compose extends Activity implements
         InputConnectionCompat.OnCommitContentListener {
 
     private static final boolean DEBUG = false;
+    private static final String TAG = "Compose";
 
     public GoogleApiClient mGoogleApiClient;
     public AppSettings settings;
@@ -136,6 +151,8 @@ public abstract class Compose extends Activity implements
     public ImageKeyboardEditText reply;
     public ImageView[] attachImage = new ImageView[4];
     public ImageButton[] cancelButton = new ImageButton[4];
+    public ImageButton[] captionButton = new ImageButton[4];
+    public CharSequence[] captions = new String[4];
     public FrameLayout[] holders = new FrameLayout[4];
     public ImageButton gifButton;
     public ImageButton attachButton;
@@ -521,6 +538,11 @@ public abstract class Compose extends Activity implements
         cancelButton[2] = (ImageButton) findViewById(R.id.cancel3);
         cancelButton[3] = (ImageButton) findViewById(R.id.cancel4);
 
+        captionButton[0] = findViewById(R.id.caption1);
+        captionButton[1] = findViewById(R.id.caption2);
+        captionButton[2] = findViewById(R.id.caption3);
+        captionButton[3] = findViewById(R.id.caption4);
+
         holders[0] = (FrameLayout) findViewById(R.id.holder1);
         holders[1] = (FrameLayout) findViewById(R.id.holder2);
         holders[2] = (FrameLayout) findViewById(R.id.holder3);
@@ -544,31 +566,98 @@ public abstract class Compose extends Activity implements
 
         for (int i = 0; i < cancelButton.length; i++) {
             final int pos = i;
-            cancelButton[i].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    imagesAttached--;
+            cancelButton[i].setOnClickListener(v -> {
+                imagesAttached--;
 
-                    List<String> uris = new ArrayList<String>();
-                    for (String uri : attachedUri) {
-                        uris.add(uri);
+                List<String> uris = new ArrayList<String>();
+                for (String uri : attachedUri) {
+                    uris.add(uri);
 
+                }
+                uris.remove(pos);
+
+                for (int i1 = 0; i1 < attachImage.length; i1++) {
+                    attachImage[i1].setImageDrawable(null);
+                    attachedUri[i1] = null;
+                    holders[i1].setVisibility(View.GONE);
+                }
+                for (int i1 = 0; i1 < imagesAttached; i1++) {
+                    attachImage[i1].setImageURI(Uri.parse(uris.get(i1)));
+                    attachedUri[i1] = uris.get(i1);
+                    holders[i1].setVisibility(View.VISIBLE);
+                }
+
+                captions[pos] = null;
+
+                attachButton.setEnabled(true);
+                attachButtonEnabled = true;
+            });
+        }
+
+        for (int i = 0; i < 4; i++) {
+            final int pos = i;
+            captionButton[i].setOnClickListener(v -> {
+                CharSequence caption = captions[pos] == null ? "" : captions[pos];
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                LayoutInflater inflater = getLayoutInflater().cloneInContext(builder.getContext());
+                View content = inflater.inflate(R.layout.caption_dialog, null);
+                EditText edit = content.findViewById(R.id.caption_edit);
+                TextView counter = content.findViewById(R.id.caption_counter);
+                int defaultColor = counter.getCurrentTextColor();
+                int error = getResources().getColor(R.color.design_default_color_error);
+
+                builder.setCancelable(true)
+                        .setPositiveButton(R.string.add, (dialog, which) -> {
+                            CharSequence text = edit.getText().toString();
+                            Log.d(TAG, String.format("Caption set: \"%s\"", text));
+                            captions[pos] = text;
+                        })
+                        .setNegativeButton(R.string.cancel, (d, w) -> {})
+                        .setTitle(R.string.add_caption)
+                        .setView(content);
+
+                AlertDialog dialog = builder.create();
+
+                edit.addTextChangedListener(new TextWatcher() {
+                    boolean tooLong = false;
+
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                     }
-                    uris.remove(pos);
 
-                    for (int i = 0; i < attachImage.length; i++) {
-                        attachImage[i].setImageDrawable(null);
-                        attachedUri[i] = null;
-                        holders[i].setVisibility(View.GONE);
-                    }
-                    for (int i = 0; i < imagesAttached; i++) {
-                        attachImage[i].setImageURI(Uri.parse(uris.get(i)));
-                        attachedUri[i] = uris.get(i);
-                        holders[i].setVisibility(View.VISIBLE);
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
                     }
 
-                    attachButton.setEnabled(true);
-                    attachButtonEnabled = true;
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        long length = s.length();
+                        counter.setText(getString(R.string.count_caption, length));
+                        if(tooLong && length <= 420) {
+                            // Reset
+                            tooLong = false;
+                            counter.setTextColor(defaultColor);
+                            edit.getBackground().setColorFilter(null);
+                            dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                                    .setEnabled(true);
+                        }
+                        if(!tooLong && length > 420) {
+                            // Too long!
+                            tooLong = true;
+                            counter.setTextColor(error);
+                            edit.getBackground()
+                                    .setColorFilter(new BlendModeColorFilter(error, BlendMode.SRC_ATOP));
+                            dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                                    .setEnabled(false);
+                        }
+                    }
+                });
+
+                dialog.show();
+                if(caption != null) {
+                    edit.setText(caption);
                 }
             });
         }
@@ -876,6 +965,16 @@ public abstract class Compose extends Activity implements
     public void onConnected(Bundle bundle) {
         Log.v("location", "connected");
         try {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
         } catch (Exception e) {
@@ -1375,6 +1474,38 @@ public abstract class Compose extends Activity implements
             return null;
         }
 
+        private UploadedMedia uploadImage(Twitter twitter, String uri, CharSequence caption) throws FileNotFoundException, TwitterException {
+            UploadedMedia media = uploadImage(twitter, uri);
+            caption(twitter, media, caption);
+            return media;
+        }
+
+        private HttpResponse caption(Twitter twitter, UploadedMedia media, CharSequence caption) throws TwitterException {
+            // only add caption if there is one to add
+            if(media != null && caption != null) {
+                Map<String, Object> payload = new HashMap<>(2);
+                Map<String, String> alt = new HashMap<>(1);
+                payload.put("media_id", media.getMediaId() + "");
+                alt.put("text", caption.toString());
+                payload.put("alt_text", alt);
+                Log.d(TAG, "caption: " + new JSONObject(payload));
+                HttpResponse response = post(twitter, twitter.getConfiguration().getUploadBaseURL() + "media/metadata/create.json",
+                        new JSONObject(payload));
+                if(response.getStatusCode() != 200) {
+                    Log.w(TAG, "caption: " + response.asString());
+                }
+                return response;
+            }
+
+            return null;
+        }
+
+
+        private HttpResponse post(Twitter twitter, String url, JSONObject object) throws TwitterException {
+            HttpClient http = HttpClientFactory.getInstance(twitter.getConfiguration().getHttpClientConfiguration());
+            return http.post(url, new HttpParameter[]{new HttpParameter(object)}, twitter.getAuthorization(), (HttpResponseListener) httpResponseEvent -> {});
+        }
+
         protected Boolean doInBackground(String... args) {
             status = args[0];
 
@@ -1482,7 +1613,7 @@ public abstract class Compose extends Activity implements
                             if (imagesAttached == 1) {
                                 //media.setMedia(files[0]);
                                 if (useAccOne) {
-                                    UploadedMedia upload = uploadImage(twitter, attachedUri[0]);
+                                    UploadedMedia upload = uploadImage(twitter, attachedUri[0], captions[0]);
 
                                     if (upload != null) {
                                         long mediaId = upload.getMediaId();
@@ -1491,7 +1622,7 @@ public abstract class Compose extends Activity implements
                                 }
 
                                 if (useAccTwo) {
-                                    UploadedMedia upload = uploadImage(twitter2, attachedUri[0]);
+                                    UploadedMedia upload = uploadImage(twitter2, attachedUri[0], captions[0]);
 
                                     if (upload != null) {
                                         long mediaId = upload.getMediaId();
@@ -1504,7 +1635,7 @@ public abstract class Compose extends Activity implements
                                 if (useAccOne) {
                                     long[] mediaIds = new long[files.length];
                                     for (int i = 0; i < files.length; i++) {
-                                        UploadedMedia upload = uploadImage(twitter, attachedUri[i]);
+                                        UploadedMedia upload = uploadImage(twitter, attachedUri[i], captions[i]);
                                         if (upload != null) {
                                             mediaIds[i] = upload.getMediaId();
                                         }
@@ -1516,7 +1647,7 @@ public abstract class Compose extends Activity implements
                                 if (useAccTwo) {
                                     long[] mediaIds = new long[files.length];
                                     for (int i = 0; i < files.length; i++) {
-                                        UploadedMedia upload = uploadImage(twitter2, attachedUri[i]);
+                                        UploadedMedia upload = uploadImage(twitter2, attachedUri[i], captions[i]);
                                         if (upload != null) {
                                             mediaIds[i] = upload.getMediaId();
                                         }
@@ -1547,6 +1678,7 @@ public abstract class Compose extends Activity implements
 
                                 if (useAccOne) {
                                     UploadedMedia upload = twitter.uploadMedia(files[0]);
+                                    caption(twitter, upload, captions[0]);
                                     long mediaId = upload.getMediaId();
 
                                     media.setMediaIds(mediaId);
@@ -1554,6 +1686,7 @@ public abstract class Compose extends Activity implements
 
                                 if (useAccTwo) {
                                     UploadedMedia upload = twitter2.uploadMedia(files[0]);
+                                    caption(twitter2, upload, captions[0]);
                                     long mediaId = upload.getMediaId();
 
                                     media2.setMediaIds(mediaId);
@@ -1575,6 +1708,7 @@ public abstract class Compose extends Activity implements
 
                                 if (useAccOne) {
                                     UploadedMedia upload = twitter.uploadVideo(files[0]);
+                                    caption(twitter, upload, captions[0]);
                                     long mediaId = upload.getMediaId();
 
                                     media.setMediaIds(mediaId);
@@ -1582,6 +1716,7 @@ public abstract class Compose extends Activity implements
 
                                 if (useAccTwo) {
                                     UploadedMedia upload = twitter2.uploadVideo(files[0]);
+                                    caption(twitter2, upload, captions[0]);
                                     long mediaId = upload.getMediaId();
 
                                     media2.setMediaIds(mediaId);

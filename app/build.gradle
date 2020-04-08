@@ -68,8 +68,9 @@ dependencies {
     implementation "com.google.android.material:material:1.1.0"
     implementation "androidx.browser:browser:1.2.0"
     implementation "androidx.preference:preference:1.1.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta4"
     implementation "androidx.legacy:legacy-preference-v14:${versions.androidX}"
-    implementation 'androidx.multidex:multidex:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'de.c1710:filemojicompat:1.0.17'
 
     implementation 'com.klinkerapps:link_builder:2.0.5'
@@ -82,7 +83,7 @@ dependencies {
     implementation 'com.klinkerapps:floating-tutorial:1.1.0'
 
     implementation 'com.github.bumptech.glide:okhttp3-integration:1.5.0@aar'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
     implementation 'com.afollestad:easyvideoplayer:0.3.0'
