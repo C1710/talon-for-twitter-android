@@ -263,7 +263,7 @@
         <item name="oppDrawerBackground">@color/dark_drawer</item>
         <item name="headerTextColor">@android:color/white</item>
         <item name="textShadowColor">@android:color/black</item>
-        <item name="windowBackground">@android:color/white</item>
+        <item name="windowBackground">@color/light_background_main</item>
         <item name="emojiDivider">@color/emoji_divider_light</item>
         <item name="circle_border">@color/circle_outline_light</item>
         <item name="message_color">@color/light_message</item>
