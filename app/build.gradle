@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
 
@@ -64,7 +64,7 @@ dependencies {
 
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation "androidx.emoji:emoji:${versions.androidX}"
+    implementation "androidx.emoji:emoji:1.1.0"
     implementation "com.google.android.material:material:1.1.0"
     implementation "androidx.browser:browser:1.2.0"
     implementation "androidx.preference:preference:1.1.0"
@@ -100,6 +100,8 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.19@aar'
     implementation 'com.github.ajalt.reprint:core:3.2.1@aar'
     implementation 'com.afollestad.material-dialogs:core:0.9.4.5'
+    implementation "com.sensortower.usage:rating-prompt-lib:4.1.0"
+    implementation 'com.sensortower.usage:event-emitter-lib:1.0.0'
     implementation files('lib/YouTubeAndroidPlayerApi.jar')
     // version 1.2.2
     implementation files('lib/twitter4j-fork.jar')

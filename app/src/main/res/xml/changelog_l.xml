@@ -1,5 +1,27 @@
 <changelog>
 
+    <version name="7.8.3">
+        <text>Scoped storage for downloading images on Android 11</text>
+    </version>
+
+    <version name="7.8.2">
+        <text>Bug fixes</text>
+    </version>
+
+    <version name="7.8.0">
+        <text>In the "app style" settings, there is now an option to disable the "drag to dismiss" on the tweet/profile viewers</text>
+    </version>
+
+    <version name="7.7.11">
+        <text>Bug fixes</text>
+        <text>Translation improvements</text>
+    </version>
+
+    <version name="7.7.10">
+        <text>Bug fixes</text>
+        <text>Translation updates</text>
+    </version>
+
     <version name="7.7.9">
         <text>Bug fixes</text>
     </version>

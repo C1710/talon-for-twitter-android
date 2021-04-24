@@ -1,1 +1,1 @@
-This update just contains bug fixes. More to come in the future!
+This update fixes some bugs :)
