@@ -522,7 +522,7 @@ public class AppSettings {
         activityRefresh = Long.parseLong(sharedPrefs.getString("activity_sync_interval", "0"));
         listRefresh = Long.parseLong(sharedPrefs.getString("list_sync_interval", "0"));
 
-        translateUrl = sharedPrefs.getString("translate_url", "https://translate.google.com/#view=home&op=translate&sl=auto&tl=en&text=");
+        translateUrl = sharedPrefs.getString("translate_url", "https://deepl.com/translate#nl/en/");
 
         if (baseTheme != 2 && sharedPrefs.getBoolean("night_mode", false) && !AndroidVersionUtils.isAndroidQ()) {
             int startHour = sharedPrefs.getInt("night_start_hour", 22);
