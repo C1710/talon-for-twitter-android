@@ -523,7 +523,7 @@ public class ExpansionViewHelper {
                             String url;
 
                             try {
-                                url = settings.translateUrl + URLEncoder.encode(tweet, "utf-8");
+                                url = settings.translateUrl + URLEncoder.encode(tweet, "utf-8").replace("+", "%20");
                             } catch (UnsupportedEncodingException e) {
                                 url = settings.translateUrl + tweet;
                             }
@@ -536,7 +536,6 @@ public class ExpansionViewHelper {
                             web.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
                             web.getSettings().setUseWideViewPort(true);
                             web.getSettings().setLoadWithOverviewMode(true);
-                            web.getSettings().setSavePassword(true);
                             web.getSettings().setSaveFormData(true);
                             web.getSettings().setJavaScriptEnabled(true);
                             web.getSettings().setAppCacheEnabled(false);
